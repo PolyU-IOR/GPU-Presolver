@@ -70,6 +70,11 @@ foreach(tool IN ITEMS
   target_link_libraries(${tool} PRIVATE gpu_presolver_core gpu_presolver_mps_reader)
 endforeach()
 
+add_executable(presolve_example ../examples/presolve_example.cpp)
+target_link_libraries(presolve_example PRIVATE
+  gpu_presolver_core gpu_presolver_mps_reader CUDA::cudart
+)
+
 include(CTest)
 if(BUILD_TESTING)
   foreach(test IN ITEMS
