@@ -106,3 +106,41 @@ The CLI supports [selected environment overrides](cpp/tools/gpu_presolver_tool_c
 ```bash
 GPUPRESOLVER_MAX_ITERS=20 ./cpp/build/gpu_presolver_mps model.mps
 ```
+
+## Performance
+
+The table compares presolve time and the percentage of original nonzeros retained
+by GPU-Presolver, PSLP, and Gurobi Presolve on 49 Mittelmann LPs, 18 large MIPLIB
+LP relaxations, and 20 QAP-derived LPs (QAP20).
+Times use a 10-second shifted geometric mean (SGM10); retained percentages are
+arithmetic means. Lower is better for both metrics.
+
+| Dataset | Presolver | Presolve time (s) | Nonzeros retained (%) |
+| --- | --- | ---: | ---: |
+| **Mittelmann** | Gurobi Presolve | 4.183 | 72.2 |
+|  | PSLP | 1.264 | 79.8 |
+|  | GPU-Presolver | **0.325** | 74.9 |
+| **MIPLIB Large** | Gurobi Presolve | 9.747 | 52.5 |
+|  | PSLP | 3.314 | 60.8 |
+|  | GPU-Presolver | **0.988** | 55.9 |
+| **QAP20** | Gurobi Presolve | 184.791 | 40.5 |
+|  | PSLP | 12.631 | 40.5 |
+|  | GPU-Presolver | **2.113** | 40.5 |
+
+Across these benchmark groups, GPU-Presolver achieves SGM10 presolve-time speedups of
+**3.4–6.0× over PSLP** and **9.9–87.5× over Gurobi Presolve**, while achieving
+reduction ratios comparable to those of Gurobi Presolve and PSLP.
+
+These heat-source localization LPs estimate heat-source intensities from
+temperature measurements on a 3D grid. The figure compares presolve times across
+six grid sizes, up to 216 million nonzeros, with a logarithmic time axis.
+
+![Presolve time versus heat-source grid size: GPU-Presolver, PSLP, and Gurobi Presolve.](assets/heat-source-presolve.svg)
+
+Across these six instances, GPU-Presolver achieves the lowest presolve time,
+with maximum speedups of **47.0× over PSLP** and **1,175.8× over Gurobi Presolve**,
+while maintaining comparable reduction ratios.
+
+*Setup:* GPU-Presolver uses one NVIDIA H100 80 GB GPU; PSLP 0.0.11 and
+Gurobi Presolve (Gurobi 12.0.2) run on Intel Xeon Gold 6548Y+ CPUs.
+Times cover presolve only, excluding MPS parsing and CPU–GPU transfers.
