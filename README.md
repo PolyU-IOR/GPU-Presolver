@@ -135,7 +135,7 @@ arithmetic means. Lower is better for both metrics.
 |  | PSLP | 12.631 | 40.5 |
 |  | GPU-Presolver | **2.113** | 40.5 |
 
-> **Note:** GPU-Presolver and HPR-LP use one NVIDIA H100 80 GB GPU;
+> **Note:** GPU-Presolver use one NVIDIA H100 80 GB GPU;
 > PSLP 0.0.11 and Gurobi Presolve (Gurobi 12.0.2) run on Intel Xeon Gold 6548Y+ CPUs.
 > Presolve timing excludes MPS parsing and CPU–GPU transfers.
 
